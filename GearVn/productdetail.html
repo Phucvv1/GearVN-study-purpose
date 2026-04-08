@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiet san pham GearVn</title>
+    <style>
+        :root {
+            --bg: #0b1016;
+            --panel: rgba(17, 25, 35, 0.92);
+            --panel-soft: rgba(255, 255, 255, 0.035);
+            --line: rgba(255, 255, 255, 0.08);
+            --line-strong: rgba(103, 232, 249, 0.18);
+            --text: #f4f7fb;
+            --muted: #94a3b8;
+            --cyan: #67e8f9;
+            --green: #6ee7b7;
+            --amber: #fbbf24;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            background:
+            radial-gradient(circle at top left, rgba(103, 232, 249, 0.10), transparent 24%),
+            radial-gradient(circle at top right, rgba(251, 191, 36, 0.08), transparent 22%),
+            linear-gradient(180deg, #081018 0%, #0b1016 48%, #0e151e 100%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(8, 16, 24, 0.84);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .topbar-inner,
+        .page {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .topbar-inner {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            font-size: 1.6rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 2px;
+            text-transform: none;
+            color: #ffffff;
+            text-shadow: 0 0 8px #ffffff, 0 0 20px #ffffff55, 0 0 40px #ffffff22;
+            transition: 0.25s ease;
+            user-select: none;
+        }
+
+        .brand span {
+            color: var(--green);
+            text-shadow: 0 0 8px var(--green), 0 0 20px rgba(110, 231, 183, 0.45), 0 0 40px rgba(110, 231, 183, 0.2);
+        }
+
+        .brand:hover {
+            letter-spacing: 4px;
+            text-shadow: 0 0 12px #ffffff, 0 0 30px #ffffff88, 0 0 60px #ffffff44;
+        }
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: var(--muted);
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: 0.25s ease;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--text);
+            border-color: rgba(103, 232, 249, 0.26);
+            background: rgba(103, 232, 249, 0.08);
+        }
+
+        .page {
+            padding-top: 30px;
+            padding-bottom: 64px;
+        }
+
+        .breadcrumb {
+            color: var(--muted);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 0.92rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+            gap: 26px;
+            align-items: stretch;
+        }
+
+        .viewer,
+        .summary,
+        .story,
+        .related {
+            background: linear-gradient(180deg, rgba(18, 27, 37, 0.96), rgba(13, 21, 30, 0.92));
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .viewer {
+            padding: 18px;
+            min-height: 540px;
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            background:
+                radial-gradient(circle at top, rgba(103, 232, 249, 0.14), transparent 48%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+        }
+
+        .viewer-frame {
+            width: 100%;
+            min-height: 500px;
+            border-radius: 24px;
+            overflow: hidden;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
+                rgba(5, 11, 18, 0.76);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .viewer img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            padding: 18px;
+        }
+
+        .summary {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .summary-top {
+            display: grid;
+            gap: 12px;
+        }
+
+        .description-block {
+            display: grid;
+            gap: 8px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.028);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .description-label {
+            color: var(--cyan);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .description-text {
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .summary h1 {
+            font-size: clamp(2rem, 3.4vw, 3.25rem);
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+        }
+
+        .summary p {
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 0.98rem;
+        }
+
+        .price {
+            font-size: 2.45rem;
+            font-weight: 900;
+            color: var(--green);
+            line-height: 1;
+        }
+
+        .purchase-strip {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 16px;
+            align-items: center;
+            padding: 18px 20px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .price-card {
+            display: grid;
+            gap: 8px;
+        }
+
+        .price-card small,
+        .checkout-note small {
+            display: block;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+        }
+
+        .price-subline {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .checkout-note {
+            display: grid;
+            gap: 8px;
+            justify-items: end;
+            text-align: right;
+        }
+
+        .checkout-note strong {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .checkout-note span {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.55;
+            max-width: 220px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 56px;
+            padding: 0 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            transition: 0.25s ease;
+            background: rgba(255, 255, 255, 0.03);
+            text-align: center;
+        }
+
+        .btn-primary {
+            color: #061019;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            border-color: transparent;
+            box-shadow: 0 14px 32px rgba(103, 232, 249, 0.22);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+        }
+
+        .btn-copy {
+            display: grid;
+            gap: 2px;
+            justify-items: start;
+        }
+
+        .btn-copy small {
+            color: inherit;
+            opacity: 0.76;
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: none;
+        }
+
+        .story,
+        .related {
+            margin-top: 24px;
+            padding: 28px;
+        }
+
+        .story h2,
+        .related h2 {
+            margin-bottom: 10px;
+            font-size: 1.35rem;
+        }
+
+        .story p {
+            color: var(--muted);
+            line-height: 1.9;
+        }
+
+        .story-list {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .story-item {
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .related-grid {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .related-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 18px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .related-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            background: radial-gradient(circle at top, rgba(103, 232, 249, 0.12), transparent 50%);
+            border-radius: 16px;
+        }
+
+        .related-card h3 {
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--text);
+        }
+
+        .related-card p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 0.92rem;
+            display: -webkit-box;
+            line-clamp: 3;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .related-card .price-small {
+            color: var(--amber);
+            font-weight: 800;
+        }
+
+        .not-found {
+            padding: 40px;
+            text-align: center;
+            border-radius: 28px;
+            background: rgba(18, 27, 37, 0.82);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .not-found p {
+            margin: 14px 0 20px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        @media (max-width: 1024px) {
+            .layout,
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .purchase-strip {
+                grid-template-columns: 1fr;
+                align-items: start;
+            }
+
+            .checkout-note {
+                justify-items: start;
+                text-align: left;
+            }
+
+            .story-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .topbar-inner,
+            .page {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .viewer {
+                min-height: 0;
+                aspect-ratio: 1 / 1;
+                padding: 14px;
+            }
+
+            .viewer-frame {
+                min-height: 0;
+            }
+
+            .viewer img {
+                padding: 10px;
+            }
+
+            .summary {
+                padding: 22px;
+            }
+
+            .story,
+            .related {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a href="index.html" class="brand">Gear<span>VN</span></a>
+            <nav class="nav">
+                <a href="index.html">Trang chủ</a>
+                <a href="product.html">Sản phẩm</a>
+                <a href="productdetail.html" class="active">Chi tiết</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page" id="app"></main>
+
+    <script src="products.js"></script>
+    <script>
+        const app = document.getElementById('app');
+        const params = new URLSearchParams(window.location.search);
+        const product = window.getProductById(params.get('id') || 1);
+        const CART_KEY = 'gearvn-cart';
+
+        function getCart() {
+            try {
+                return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        }
+
+        function addToCart(productId) {
+            const cart = getCart();
+            const existingItem = cart.find((item) => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id: productId, quantity: 1 });
+            }
+
+            saveCart(cart);
+            window.location.href = 'cart.html';
+        }
+
+        function renderNotFound() {
+            app.innerHTML = `
+                <section class="not-found">
+                    <h1>Khong tim thay san pham</h1>
+                    <p>Ma san pham khong hop le hoac da bi xoa. Ban co the quay lai danh sach san pham de chon mot san pham khac.</p>
+                    <a class="btn btn-primary" href="product.html">Ve trang san pham</a>
+                </section>
+            `;
+        }
+
+        function renderDetail(currentProduct) {
+            const related = window.PRODUCTS
+                .filter((item) => item.category === currentProduct.category && item.id !== currentProduct.id)
+                .slice(0, 3);
+
+            app.innerHTML = `
+                <nav class="breadcrumb">
+                    <a href="index.html">Trang chu</a>
+                    <span>/</span>
+                    <a href="product.html">San pham</a>
+                    <span>/</span>
+                    <span>${currentProduct.category}</span>
+                </nav>
+
+                <section class="layout">
+                    <div class="viewer">
+                        <div class="viewer-frame">
+                            <img src="${currentProduct.imageUrl}" alt="${currentProduct.name}">
+                        </div>
+                    </div>
+                    <aside class="summary">
+                        <div class="summary-top">
+                            <h1>${currentProduct.name}</h1>
+                            <div class="description-block">
+                                <span class="description-label">Mô tả sản phẩm</span>
+                                <p class="description-text">${currentProduct.description}</p>
+                            </div>
+                        </div>
+                        <div class="purchase-strip">
+                            <div class="price-card">
+                                <small>Giá tham khảo</small>
+                                <div class="price">${window.formatProductPrice(currentProduct.price)}</div>
+                                <div class="price-subline">Đã gồm mức giá hiển thị nội bộ, sẵn sàng chuyển sang bước thanh toán.</div>
+                            </div>
+                            <div class="checkout-note">
+                                <small>Thanh toán</small>
+                                <strong>Sẵn sàng đặt hàng</strong>
+                                <span>Bố cục ưu tiên thao tác chính để người dùng ra quyết định nhanh và rõ ràng hơn.</span>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-primary" type="button" data-add-to-cart="${currentProduct.id}">
+                                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M3 4H5.2C5.64 4 6.03 4.29 6.16 4.71L6.7 6.5H20.2C21 6.5 21.48 7.39 21.04 8.06L18.27 12.3C18.08 12.6 17.75 12.78 17.39 12.78H9.05" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9.5 17.5C10.33 17.5 11 18.17 11 19C11 19.83 10.33 20.5 9.5 20.5C8.67 20.5 8 19.83 8 19C8 18.17 8.67 17.5 9.5 17.5Z" fill="currentColor"/>
+                                    <path d="M17.5 17.5C18.33 17.5 19 18.17 19 19C19 19.83 18.33 20.5 17.5 20.5C16.67 20.5 16 19.83 16 19C16 18.17 16.67 17.5 17.5 17.5Z" fill="currentColor"/>
+                                </svg>
+                                <span class="btn-copy">
+                                    <span>Thêm vào giỏ hàng</span>
+                                    <small>Lưu sản phẩm để mua sau</small>
+                                </span>
+                            </button>
+                            <a class="btn btn-secondary" href="checkout.html?id=${currentProduct.id}">
+                                <span class="btn-copy">
+                                    <span>Thanh toán ngay</span>
+                                    <small>Đi thẳng đến bước thanh toán</small>
+                                </span>
+                            </a>
+                        </div>
+                    </aside>
+                </section>
+                <section class="related">
+                    <h2>Sản phẩm liên quan</h2>
+                    <p>Cùng danh mục ${currentProduct.category}, phù hợp để người dùng tiếp tục khám phá thêm các lựa chọn gần với nhu cầu hiện tại.</p>
+                    <div class="related-grid">
+                        ${related.map((item) => `
+                            <article class="related-card">
+                                <img src="${item.imageUrl}" alt="${item.name}" loading="lazy">
+                                <h3>${item.name}</h3>
+                                <p>${item.description}</p>
+                                <div class="price-small">${window.formatProductPrice(item.price)}</div>
+                                <a class="btn" href="productdetail.html?id=${item.id}">Xem chi tiết</a>
+                            </article>
+                        `).join('') || '<div class="story-item">Chưa có sản phẩm cùng danh mục để gợi ý thêm.</div>'}
+                    </div>
+                </section>
+            `;
+        }
+
+        if (!product) {
+            renderNotFound();
+        } else {
+            renderDetail(product);
+        }
+
+        app.addEventListener('click', (event) => {
+            const addButton = event.target.closest('[data-add-to-cart]');
+            if (!addButton) {
+                return;
+            }
+
+            addToCart(Number(addButton.dataset.addToCart));
+        });
+    </script>
+</body>
+</html>
